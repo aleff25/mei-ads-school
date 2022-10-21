@@ -1,4 +1,4 @@
-package pt.iscte.mei.school.domain.courses;
+package pt.iscte.mei.school.courses.model;
 
 public enum Shift {
 
