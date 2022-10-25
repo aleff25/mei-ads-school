@@ -28,4 +28,8 @@ public class Course {
         this.capacity = capacity;
         this.capacityUsed = capacityUsed;
     }
+
+    public int capacityRemaining() {
+        return capacity - capacityUsed;
+    }
 }
