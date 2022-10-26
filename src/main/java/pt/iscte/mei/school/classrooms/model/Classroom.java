@@ -1,22 +1,27 @@
 package pt.iscte.mei.school.classrooms.model;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Getter
 @Table(name = "classrooms")
+@Entity
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor
 public class Classroom {
 
-    private final String id;
-    private final String name;
-    private final short capacity;
+    @Id
+    @GeneratedValue
+    private String id;
+    private String name;
+    private short capacity;
 
     @Builder
     public Classroom(final String id, final String name, final short capacity) {

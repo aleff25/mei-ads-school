@@ -1,27 +1,33 @@
 package pt.iscte.mei.school.courses.model;
 
-import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Getter
+@Data
 @Table(name = "courses")
+@Entity
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor
 public class Course {
 
-    private final String id;
-    private final String name;
-    private final Shift shift;
-    private final short capacity;
-    private final short capacityUsed;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
+    private String name;
+    private Shift shift;
+    private int capacity;
+    private int capacityUsed;
 
     @Builder
-    public Course(final String id, final String name, final Shift shift, final short capacity, final short capacityUsed) {
+    public Course(final String id, final String name, final Shift shift, final int capacity, final int capacityUsed) {
         this.id = id;
         this.name = name;
         this.shift = shift;
@@ -31,5 +37,9 @@ public class Course {
 
     public int capacityRemaining() {
         return capacity - capacityUsed;
+    }
+
+    public void addNewStudentsToCourse(int quantity) {
+        this.capacityUsed += quantity;
     }
 }

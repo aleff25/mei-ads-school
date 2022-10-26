@@ -1,25 +1,31 @@
 package pt.iscte.mei.school.appointments.model;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 
 @Getter
 @Table(name = "appointments")
+@Entity
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor
 public class Appointment {
 
-    private final LocalDateTime startDate;
-    private final LocalDateTime endDate;
-    private final short capacityRequired;
-    private final String curricularUnit;
+    @Id
+    @GeneratedValue
+    private String id;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private short capacityRequired;
+    private String curricularUnit;
 
     @Builder
     public Appointment(final LocalDateTime startDate, final LocalDateTime endDate, final short capacityRequired, final String curricularUnit) {
