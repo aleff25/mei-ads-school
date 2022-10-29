@@ -24,11 +24,12 @@ public class Appointment {
     private String id;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private short capacityRequired;
+    private int capacityRequired;
     private String curricularUnit;
 
     @Builder
-    public Appointment(final LocalDateTime startDate, final LocalDateTime endDate, final short capacityRequired, final String curricularUnit) {
+    public Appointment(final LocalDateTime startDate, final LocalDateTime endDate, final int capacityRequired,
+                       final String curricularUnit) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.capacityRequired = capacityRequired;
