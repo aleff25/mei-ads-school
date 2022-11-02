@@ -13,16 +13,16 @@ import java.util.List;
 @Transactional
 @AllArgsConstructor
 @Log4j2
-public class CouseApplicationService {
+public class CourseApplicationService {
 
     private final CourseRepository repository;
 
-    private List<Course> searchAll() {
+    public List<Course> searchAll() {
         log.info("Searching all courses");
         return repository.findAll();
     }
 
-    private List<Course> searchByName(String name) {
+    public List<Course> searchByName(String name) {
         log.info("Searching course by name = {}", name);
 
         return repository.findAllByNameLikeIgnoreCase(name);

@@ -29,7 +29,8 @@ public class Appointment {
     private boolean supervisionalApproval;
 
     @Builder
-    public Appointment(final LocalDateTime startDate, final LocalDateTime endDate, final short capacityRequired, final String curricularUnit, final boolean supervisionalApproval) {
+    public Appointment(final LocalDateTime startDate, final LocalDateTime endDate, final int capacityRequired,
+                       final String curricularUnit, final boolean supervisionalApproval) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.capacityRequired = capacityRequired;

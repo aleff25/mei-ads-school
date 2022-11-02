@@ -37,7 +37,6 @@ public class AppointmentApplicationService {
         }
 
         repository.saveAndFlush(appointment);
-
     }
 
     public List<Appointment> search(SearchAppointmentDTO dto) {
