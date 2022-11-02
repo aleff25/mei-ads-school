@@ -43,7 +43,7 @@ public class AppointmentApplicationService {
         log.info("Searching all appointments with dates between {} and {}", dto.getStartDate(), dto.getEndDate());
 
         return repository.getAllBetweenDates(dto.getStartDate(),
-                dto.getEndDate());
+                dto.getEndDate()); 
     }
 
 
