@@ -21,6 +21,6 @@ public class AppointmentController {
     @PostMapping(path = "/", produces = MediaType.TEXT_PLAIN_VALUE)
     public List<Appointment> getAll(@RequestBody RegisterAppointmentDTO dto) {
         return null;
-    }
+    } 
 
 }
