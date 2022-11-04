@@ -22,12 +22,14 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String name;
+    private String location;
+    private String curricularUnit;
     private Shift shift;
     private int capacity;
     private int capacityUsed;
 
     @Builder
-    public Course(final String id, final String name, final Shift shift, final int capacity, final int capacityUsed) {
+    public Course(final String id, final String name, final String location, final String curricularUnit, final Shift shift, final int capacity, final int capacityUsed) {
         this.id = id;
         this.name = name;
         this.shift = shift;

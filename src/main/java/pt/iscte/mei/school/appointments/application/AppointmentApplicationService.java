@@ -47,4 +47,10 @@ public class AppointmentApplicationService {
     }
 
 
+    public List<Appointment> searchAll() {
+        log.info("Searching all appointments");
+
+        return repository.findAll();
+    }
+
 }

@@ -5,10 +5,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 @Getter
 @Table(name = "classrooms")
@@ -21,12 +23,16 @@ public class Classroom {
     @GeneratedValue
     private String id;
     private String name;
-    private short capacity;
+    private int capacity;
+
+    @ElementCollection
+    private List<Caracteristic> caracteristics;
 
     @Builder
-    public Classroom(final String id, final String name, final short capacity) {
+    public Classroom(final String id, final String name, final int capacity, final List<Caracteristic> caracteristics) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
+        this.caracteristics = caracteristics;
     }
 }
