@@ -25,6 +25,7 @@ public class Classroom {
     private String name;
     private int capacity;
 
+    //TODO: See how this column is create in h2 database
     @ElementCollection
     private List<Caracteristic> caracteristics;
 

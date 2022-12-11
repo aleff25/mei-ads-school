@@ -24,7 +24,6 @@ import java.util.Date;
 @Data
 @Table(name = "students")
 @Entity
-@EqualsAndHashCode
 @NoArgsConstructor
 public class Student {
 

@@ -1,4 +1,4 @@
-package pt.iscte.mei.school.appointments.api;
+package pt.iscte.mei.school.appointments.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
