@@ -1,9 +1,9 @@
 package pt.iscte.mei.school.appointments.model;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import pt.iscte.mei.school.classrooms.model.Caracteristic;
 
 import javax.persistence.Entity;
@@ -13,15 +13,15 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 
-@Getter
+@Data
 @Table(name = "appointments")
 @Entity
-@EqualsAndHashCode
 @NoArgsConstructor
 public class Appointment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

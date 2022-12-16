@@ -1,4 +1,4 @@
-package pt.iscte.mei.school.curricularunits.model;
+package pt.iscte.mei.school.features.model;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,10 +8,10 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 @Data
-@Table(name = "curricular_units")
+@Table(name = "features")
 @Entity
 @NoArgsConstructor
-public class CurricularUnit {
+public class Feature {
 
     @Id
     @GeneratedValue(generator="system-uuid")
@@ -21,7 +21,7 @@ public class CurricularUnit {
     private String name;
 
     @Builder
-    public CurricularUnit(final String id, final String name) {
+    public Feature(final String id, final String name) {
         this.id = id;
         this.name = name;
     }

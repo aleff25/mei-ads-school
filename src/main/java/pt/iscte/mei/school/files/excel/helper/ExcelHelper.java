@@ -1,17 +1,16 @@
 package pt.iscte.mei.school.files.excel.helper;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 import pt.iscte.mei.school.appointments.application.dto.ReadXLSXFileAppointmentDTO;
 import pt.iscte.mei.school.appointments.model.Appointment;
-import pt.iscte.mei.school.classrooms.model.Caracteristic;
 import pt.iscte.mei.school.classrooms.model.Classroom;
 import pt.iscte.mei.school.courses.model.Course;
 import pt.iscte.mei.school.courses.model.Shift;
+import pt.iscte.mei.school.curricularunits.model.CurricularUnit;
+import pt.iscte.mei.school.features.model.Feature;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -24,11 +23,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+@Slf4j
 public class ExcelHelper {
 
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] HEADERs = {"Id", "Title", "Description", "Published"};
-    static String SHEET = "Tutorials";
+    static String SHEET = "Turnos";
 
     public static boolean hasExcelFormat(MultipartFile file) {
 
@@ -68,99 +68,59 @@ public class ExcelHelper {
     }
 
     public static List<ReadXLSXFileAppointmentDTO> excelToAppointments(InputStream is) {
+
+        Workbook workbook = null;
         try {
-            Workbook workbook = new XSSFWorkbook(is);
+            workbook = new XSSFWorkbook(is);
 
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rows = sheet.iterator();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
-
+            DataFormatter dataFormatter = new DataFormatter();
             List<ReadXLSXFileAppointmentDTO> data = new ArrayList<>();
 
-            int rowNumber = 0;
-            while (rows.hasNext()) {
-                Row currentRow = rows.next();
+            int index = 0;
+            for (Row row : sheet) {
+                if (index++ == 0) continue;
 
-                // skip header
-                if (rowNumber == 0) {
-                    rowNumber++;
-                    continue;
-                }
+                Course course = Course.builder()
+                        .name(dataFormatter.formatCellValue(row.getCell(3)))
+                        .location(dataFormatter.formatCellValue(row.getCell(0)))
+                        .shift(Shift.PostWork)
+                        .capacity(Integer.parseInt(dataFormatter.formatCellValue(row.getCell(4))))
+                        .build();
 
-                Iterator<Cell> cellsInRow = currentRow.iterator();
+                CurricularUnit curricularUnit = CurricularUnit.builder()
+                        .name(dataFormatter.formatCellValue(row.getCell(1)))
+                        .build();
 
-                Course.CourseBuilder courseBuilder = Course.builder();
-                Classroom.ClassroomBuilder classroomBuilder = Classroom.builder();
-                Appointment.AppointmentBuilder appointmentBuilder = Appointment.builder();
-                String startHour = "", endHour = "";
-                Date appointmentDate = null;
+                Classroom classroom = Classroom.builder()
+                        .name(dataFormatter.formatCellValue(row.getCell(12)))
+                        .capacity(Integer.parseInt(dataFormatter.formatCellValue(row.getCell(13))))
+                        .build();
 
-                int cellIdx = 0;
-                while (cellsInRow.hasNext()) {
-                    Cell currentCell = cellsInRow.next();
+                String startHour = dataFormatter.formatCellValue(row.getCell(8));
+                String endHour = dataFormatter.formatCellValue(row.getCell(9));
+                Date appointmentDate = row.getCell(10).getDateCellValue();
 
-                    switch (cellIdx) {
-                        case 0:
-                            courseBuilder.location(currentCell.getStringCellValue());
-                            break;
-                        case 1:
-                            courseBuilder.curricularUnit(currentCell.getStringCellValue());
-                            break;
-                        case 2:
-                            //TODO: Add rule to get correct shift
-                            courseBuilder.shift(Shift.PostWork);
-                            break;
-                        case 3:
-                            courseBuilder.capacityUsed((int) currentCell.getNumericCellValue());
-                            break;
-                        case 5:
-                            courseBuilder.name(currentCell.getStringCellValue());
-                            break;
-                        case 7:
-                            //TODO: Search if day of week is really necessary
-                            break;
-                        case 8:
-                            startHour = currentCell.getStringCellValue();
-                            break;
-                        case 9:
-                            endHour = currentCell.getStringCellValue();
-                            break;
-                        case 10:
-                            appointmentDate = currentCell.getDateCellValue();
-                            break;
-                        case 11:
-                            //TODO: Get the correct caracteristic
-                            appointmentBuilder.caracteristic(Caracteristic.CLASSROOM_MASTER);
-                            break;
-                        case 12:
-                            classroomBuilder.name(currentCell.getStringCellValue());
-                            break;
-                        case 13:
-                            classroomBuilder.capacity((int) currentCell.getNumericCellValue());
-                            break;
-                        case 14:
-                            //TODO: For each caracterisct instantiate a new object to set in the class as list
-                            //classroomBuilder.caracteristics()
-                            break;
-                        default:
-                            break;
-                    }
+                appointmentDate.setTime(Long.parseLong(startHour.split(":")[0]));
+                LocalDateTime startAppointmentDate = LocalDateTime.parse(appointmentDate.toString(), formatter);
 
-                    cellIdx++;
-                }
+                appointmentDate.setTime(Long.parseLong(endHour.split(":")[0]));
+                LocalDateTime endAppointmentDate = LocalDateTime.parse(appointmentDate.toString() + " " + endHour, formatter);
 
-//                appointmentDate.setTime(Long.parseLong(startHour.split(":")[0]));
-//
-//                LocalDateTime startAppointmentDate = LocalDateTime.parse(appointmentDate.toString(), formatter);
-//
-//                appointmentDate.setTime(Long.parseLong(endHour.split(":")[0]));
-//                LocalDateTime endAppointmentDate = LocalDateTime.parse(appointmentDate.toString() + " " + endHour, formatter);
-//
-//                appointmentBuilder.startDate(startAppointmentDate);
-//                appointmentBuilder.endDate(endAppointmentDate);
 
-                ReadXLSXFileAppointmentDTO dto = ReadXLSXFileAppointmentDTO.from(courseBuilder.build(),
-                        appointmentBuilder.build(), classroomBuilder.build());
+                Appointment appointment = Appointment.builder()
+                        .startDate(startAppointmentDate)
+                        .endDate(endAppointmentDate)
+                        .build();
+
+                Feature feature = Feature.builder()
+                        .name(dataFormatter.formatCellValue(row.getCell(11)))
+                        .build();
+
+                ReadXLSXFileAppointmentDTO dto = ReadXLSXFileAppointmentDTO.from(course,
+                        appointment, classroom);
 
                 data.add(dto);
             }
@@ -170,6 +130,12 @@ public class ExcelHelper {
             return data;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
+        } finally {
+            try {
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
         }
     }
 }

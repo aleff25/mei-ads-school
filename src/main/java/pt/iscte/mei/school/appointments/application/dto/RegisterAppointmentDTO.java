@@ -2,20 +2,19 @@ package pt.iscte.mei.school.appointments.application.dto;
 
 
 import io.swagger.annotations.ApiModel;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
-@AllArgsConstructor(staticName = "from")
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@Builder
 @ApiModel(description = "Information's to register a new appointment")
-public class RegisterAppointmentDTO {
+public final class RegisterAppointmentDTO {
 
     @NotNull(message = "{RegisterAppointmentDTO.startDate.NotNull}")
     private LocalDateTime startDate;
@@ -29,6 +28,12 @@ public class RegisterAppointmentDTO {
     @NotBlank(message = "{RegisterAppointmentDTO.courseId.NotBlank}")
     private String courseId;
 
+    @NotBlank(message = "{RegisterAppointmentDTO.curricularUnitId.NotBlank}")
+    private String curricularUnitId;
+
     @NotNull(message = "{RegisterAppointmentDTO.capacity.NotNull}")
     private int capacity;
+
+    @NotEmpty(message = "{RegisterAppointmentDTO.features.NotEmpty}")
+    private List<String> features;
 }
