@@ -27,16 +27,24 @@ public class Appointment {
     private LocalDateTime endDate;
     private int capacityRequired;
     private String curricularUnit;
+
+    private String classroom;
+
+    private String course;
     private Caracteristic caracteristic;
     private boolean supervisionalApproval;
 
     @Builder
     public Appointment(final LocalDateTime startDate, final LocalDateTime endDate, final int capacityRequired,
-                       final String curricularUnit, final Caracteristic caracteristic, final boolean supervisionalApproval) {
+                       final String curricularUnit, final String classroom, final String course,
+                       final Caracteristic caracteristic,
+                       final boolean supervisionalApproval) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.capacityRequired = capacityRequired;
         this.curricularUnit = curricularUnit;
+        this.classroom = classroom;
+        this.course = course;
         this.caracteristic = caracteristic;
         this.supervisionalApproval = supervisionalApproval;
     }

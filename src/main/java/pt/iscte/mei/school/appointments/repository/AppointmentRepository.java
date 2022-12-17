@@ -12,4 +12,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
 
     @Query(value = "from Appointment t where t.startDate >= :startDate AND t.endDate <= :endDate")
     List<Appointment> getAllBetweenDates(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    @Query(value = "from Appointment t where t.startDate >= :startDate AND t.endDate <= :endDate AND t.classroom = " +
+            ":classroomId OR t.course = :courseId")
+    List<Appointment> getAllBetweenDatesAndClassroom(@Param("startDate") LocalDateTime startDate,
+                                                     @Param("endDate") LocalDateTime endDate,
+                                                     @Param("classroomId") String classroomId,
+                                                     @Param("courseId") String courseId);
 }

@@ -6,10 +6,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 @Data
 @Table(name = "courses")
@@ -24,13 +26,16 @@ public class Course {
     private String id;
     private String name;
     private String location;
-    private String curricularUnit;
+
+    @ElementCollection
+    private List<String> curricularUnits;
     private Shift shift;
     private int capacity;
     private int capacityUsed;
 
     @Builder
-    public Course(final String id, final String name, final String location, final String curricularUnit, final Shift shift, final int capacity, final int capacityUsed) {
+    public Course(final String id, final String name, final String location, final List<String> curricularUnits,
+                  final Shift shift, final int capacity, final int capacityUsed) {
         this.id = id;
         this.name = name;
         this.shift = shift;

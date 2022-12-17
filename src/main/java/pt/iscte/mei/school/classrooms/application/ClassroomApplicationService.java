@@ -17,14 +17,20 @@ public class ClassroomApplicationService {
 
     private final ClassroomRepository repository;
 
-    private List<Classroom> searchAll() {
+    public List<Classroom> searchAll() {
         log.info("Searching all classrooms");
         return repository.findAll();
     }
 
-    private List<Classroom> searchByName(String name) {
+    public List<Classroom> searchByName(String name) {
         log.info("Searching classroom by name = {}", name);
 
         return repository.findAllByNameLikeIgnoreCase(name);
+    }
+
+    public Classroom searchById(String id) {
+        log.info("Searching classroom by id = {}", id);
+
+        return repository.findById(id).get();
     }
 }
