@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pt.iscte.mei.school.courses.model.Course;
 import pt.iscte.mei.school.curricularunits.model.CurricularUnit;
 import pt.iscte.mei.school.curricularunits.repository.CurricularUnitRepository;
 
@@ -19,7 +18,7 @@ public class CurricularUnitApplicationService {
     private final CurricularUnitRepository repository;
 
     public List<CurricularUnit> searchAll() {
-        log.info("Searching all courses");
+        log.info("Searching all curricular units");
         return repository.findAll();
     }
 

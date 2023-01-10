@@ -43,3 +43,8 @@ insert into course_curricular_units values ( '68835901-12e2-46df-bd41-b4f1f0536f
 insert into course_curricular_units values ( '68835901-12e2-46df-bd41-b4f1f0536f69', '10fbbb5c-044e-4ace-bb53-c11dc3f57ad3' );
 insert into course_curricular_units values ( '68835901-12e2-46df-bd41-b4f1f0536f69', '90fe09c0-aab6-4b32-bf52-a74533c58582' );
 insert into course_curricular_units values ( '68835901-12e2-46df-bd41-b4f1f0536f69', 'e3916260-5321-4208-85b5-f09f0541d49b' );
+
+insert into classrooms values ('0f7f4ddf-e719-4d5c-99cd-05c0e95e62e1', 60, 'Sala 01');
+insert into classrooms values ('b4c60fd0-3b3d-4796-a28d-ab46854091c8', 60, 'Sala 02');
+insert into classrooms values ('19db7570-741c-4b5e-9921-57e86dc18a1b', 60, 'Sala 03');
+insert into classrooms values ('19ce6008-22ba-4994-83c2-46c6a0fd7c54', 60, 'Sala04');
