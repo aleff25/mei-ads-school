@@ -19,6 +19,7 @@ import pt.iscte.mei.school.courses.model.Course;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,14 +33,25 @@ public class AppointmentApplicationService {
     private final CourseApplicationService courseService;
 
     public void register(RegisterAppointmentDTO dto) {
-        var appointment = Appointment.builder()
-                .startDate(dto.getStartDate())
-                .endDate(dto.getEndDate())
-                .capacityRequired(dto.getCapacity())
-                .classroom(dto.getClassroomId())
-                .course(dto.getCourseId())
-                .build();
 
+        List<Appointment> appointments = new ArrayList<>();
+        for (int index = 0; index < dto.getStartDates().size(); index++) {
+            var appointment = Appointment.builder()
+                    .startDate(dto.getStartDates().get(index))
+                    .endDate(dto.getEndDates().get(index))
+                    .capacityRequired(dto.getCapacity())
+                    .curricularUnit(dto.getCurricularUnitId())
+                    .classroom(dto.getClassroomId())
+                    .course(dto.getCourseId())
+                    .build();
+
+            appointments.add(appointment);
+        }
+
+        appointments.forEach(this::register);
+    }
+
+    private void register(Appointment appointment) {
         log.info("Saving new appointment = {}", appointment);
 
         LocalDateTime startDate = appointment.getStartDate();
@@ -50,7 +62,7 @@ public class AppointmentApplicationService {
             throw new MeiAdsSchoolAppointmentNotPermittedException();
         }
 
-        if (startDate.getDayOfWeek().equals(DayOfWeek.MONDAY) ||
+        if (startDate.getDayOfWeek().equals(DayOfWeek.SUNDAY) ||
                 (startDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) &&
                         startDate.getHour() > 13)
         ) {
@@ -61,7 +73,7 @@ public class AppointmentApplicationService {
         Course course = courseService.searchById(appointment.getCourse());
 
         List<Appointment> appointmentsClassroom = repository.getAllBetweenDatesAndClassroom(startDate,
-                endDate, classroom.getId(), course.getId());
+                endDate, classroom.getId());
 
         if (!appointmentsClassroom.isEmpty()) {
             throw new MeiAdsSchoolAppointmentClassroomAlreadyRegisteredException();

@@ -10,13 +10,15 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, String> {
 
-    @Query(value = "from Appointment t where t.startDate >= :startDate AND t.endDate <= :endDate")
+    @Query(value = "from Appointment t where t.startDate >=  FORMATDATETIME(:startDate, 'yyyy-MM-dd hh:mm') AND t.endDate <= FORMATDATETIME(:endDate, 'yyyy-MM-dd hh:mm')")
     List<Appointment> getAllBetweenDates(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-    @Query(value = "from Appointment t where t.startDate >= :startDate AND t.endDate <= :endDate AND t.classroom = " +
-            ":classroomId OR t.course = :courseId")
+    @Query(value = "from Appointment t where t.classroom = :classroomId AND t.startDate " +
+            ">= FORMATDATETIME(:startDate, 'yyyy-MM-dd hh:mm') AND t.endDate <= FORMATDATETIME(:startDate, 'yyyy-MM-dd hh:mm')" +
+            " AND t.startDate >= FORMATDATETIME(:endDate, 'yyyy-MM-dd hh:mm') AND t" +
+            ".endDate <= " +
+            "FORMATDATETIME(:endDate, 'yyyy-MM-dd hh:mm')")
     List<Appointment> getAllBetweenDatesAndClassroom(@Param("startDate") LocalDateTime startDate,
                                                      @Param("endDate") LocalDateTime endDate,
-                                                     @Param("classroomId") String classroomId,
-                                                     @Param("courseId") String courseId);
+                                                     @Param("classroomId") String classroomId);
 }

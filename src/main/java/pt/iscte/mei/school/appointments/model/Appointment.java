@@ -5,10 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import pt.iscte.mei.school.classrooms.model.Caracteristic;
+import pt.iscte.mei.school.classrooms.model.Classroom;
+import pt.iscte.mei.school.courses.model.Course;
+import pt.iscte.mei.school.curricularunits.model.CurricularUnit;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -28,9 +34,21 @@ public class Appointment {
     private int capacityRequired;
     private String curricularUnit;
 
+    @JoinColumn(name = "curricularUnit", insertable = false, updatable = false)
+    @OneToOne(targetEntity = CurricularUnit.class, fetch = FetchType.EAGER)
+    private CurricularUnit curricularUnitEntity;
+
     private String classroom;
 
+    @JoinColumn(name = "classroom", insertable = false, updatable = false)
+    @OneToOne(targetEntity = Classroom.class, fetch = FetchType.EAGER)
+    private Classroom classroomEntity;
+
     private String course;
+
+    @JoinColumn(name = "course", insertable = false, updatable = false)
+    @OneToOne(targetEntity = Course.class, fetch = FetchType.EAGER)
+    private Course courseEntity;
     private Caracteristic caracteristic;
     private boolean supervisionalApproval;
 

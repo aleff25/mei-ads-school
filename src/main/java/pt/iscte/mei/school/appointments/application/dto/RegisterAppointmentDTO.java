@@ -16,11 +16,11 @@ import java.util.List;
 @ApiModel(description = "Information's to register a new appointment")
 public final class RegisterAppointmentDTO {
 
-    @NotNull(message = "{RegisterAppointmentDTO.startDate.NotNull}")
-    private LocalDateTime startDate;
+    @NotEmpty(message = "{RegisterAppointmentDTO.startDate.NotNull}")
+    private List<LocalDateTime> startDates;
 
-    @NotNull(message = "{RegisterAppointmentDTO.endDate.NotNull}")
-    private LocalDateTime endDate;
+    @NotEmpty(message = "{RegisterAppointmentDTO.endDate.NotNull}")
+    private List<LocalDateTime> endDates;
 
     @NotBlank(message = "{RegisterAppointmentDTO.classroomId.NotBlank}")
     private String classroomId;
