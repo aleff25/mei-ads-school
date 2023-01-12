@@ -8,4 +8,8 @@ import java.util.List;
 public interface ClassroomRepository extends JpaRepository<Classroom, String> {
 
     List<Classroom> findAllByNameLikeIgnoreCase(String name);
+
+    boolean existsByName(String name);
+
+    Classroom findByName(String name);
 }

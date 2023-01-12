@@ -51,7 +51,7 @@ public class AppointmentApplicationService {
         appointments.forEach(this::register);
     }
 
-    private void register(Appointment appointment) {
+    public void register(Appointment appointment) {
         log.info("Saving new appointment = {}", appointment);
 
         LocalDateTime startDate = appointment.getStartDate();
@@ -69,21 +69,21 @@ public class AppointmentApplicationService {
             throw new MeiAdsSchoolAppointmentNotPermittedException();
         }
 
-        Classroom classroom = classroomService.searchById(appointment.getClassroom());
-        Course course = courseService.searchById(appointment.getCourse());
+        if (appointment.getClassroom() != null) {
+            Classroom classroom = classroomService.searchById(appointment.getClassroom());
 
-        List<Appointment> appointmentsClassroom = repository.getAllBetweenDatesAndClassroom(startDate,
-                endDate, classroom.getId());
+            List<Appointment> appointmentsClassroom = repository.getAllBetweenDatesAndClassroom(startDate,
+                    endDate, classroom.getId());
 
-        if (!appointmentsClassroom.isEmpty()) {
-            throw new MeiAdsSchoolAppointmentClassroomAlreadyRegisteredException();
+            if (!appointmentsClassroom.isEmpty()) {
+                throw new MeiAdsSchoolAppointmentClassroomAlreadyRegisteredException();
+            }
         }
 
         List<Appointment> appointmentsRegistered = repository.getAllBetweenDates(startDate,
                 endDate);
 
-        if (!appointmentsRegistered.isEmpty()) {
-
+        if (!appointmentsRegistered.isEmpty() && appointment.getCurricularUnit() != null) {
             int appointmentCurricularUnits =
                     (int) appointmentsRegistered.stream().filter(a -> a.getCurricularUnit().equals(appointment.getCurricularUnit())).count();
 

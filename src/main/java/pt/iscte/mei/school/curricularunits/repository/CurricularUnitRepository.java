@@ -9,4 +9,8 @@ import java.util.List;
 public interface CurricularUnitRepository extends JpaRepository<CurricularUnit, String> {
 
     List<CurricularUnit> findAllByNameLikeIgnoreCase(String name);
+
+    boolean existsByName(String name);
+
+    CurricularUnit findByName(String name);
 }

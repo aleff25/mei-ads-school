@@ -20,4 +20,13 @@ public class FeatureApplicationService {
 
         return repository.findAll();
     }
+
+    public Feature saveIfNotExists(Feature feature) {
+        String name = feature.getName();
+        if (!repository.existsByName(name)) {
+            return repository.save(feature);
+        }
+
+        return repository.findByName(name);
+    }
 }

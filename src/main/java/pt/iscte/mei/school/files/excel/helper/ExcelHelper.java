@@ -17,11 +17,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 public class ExcelHelper {
@@ -74,8 +80,6 @@ public class ExcelHelper {
             workbook = new XSSFWorkbook(is);
 
             Sheet sheet = workbook.getSheetAt(0);
-            Iterator<Row> rows = sheet.iterator();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
             DataFormatter dataFormatter = new DataFormatter();
             List<ReadXLSXFileAppointmentDTO> data = new ArrayList<>();
 
@@ -87,7 +91,7 @@ public class ExcelHelper {
                         .name(dataFormatter.formatCellValue(row.getCell(3)))
                         .location(dataFormatter.formatCellValue(row.getCell(0)))
                         .shift(Shift.PostWork)
-                        .capacity(Integer.parseInt(dataFormatter.formatCellValue(row.getCell(4))))
+                        .capacity(convertToInteger(dataFormatter.formatCellValue(row.getCell(4))))
                         .build();
 
                 CurricularUnit curricularUnit = CurricularUnit.builder()
@@ -96,7 +100,7 @@ public class ExcelHelper {
 
                 Classroom classroom = Classroom.builder()
                         .name(dataFormatter.formatCellValue(row.getCell(12)))
-                        .capacity(Integer.parseInt(dataFormatter.formatCellValue(row.getCell(13))))
+                        .capacity(convertToInteger(dataFormatter.formatCellValue(row.getCell(13))))
                         .build();
 
                 String startHour = dataFormatter.formatCellValue(row.getCell(8));
@@ -104,10 +108,10 @@ public class ExcelHelper {
                 Date appointmentDate = row.getCell(10).getDateCellValue();
 
                 appointmentDate.setTime(Long.parseLong(startHour.split(":")[0]));
-                LocalDateTime startAppointmentDate = LocalDateTime.parse(appointmentDate.toString(), formatter);
+                LocalDateTime startAppointmentDate = appointmentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
                 appointmentDate.setTime(Long.parseLong(endHour.split(":")[0]));
-                LocalDateTime endAppointmentDate = LocalDateTime.parse(appointmentDate.toString() + " " + endHour, formatter);
+                LocalDateTime endAppointmentDate = appointmentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
 
                 Appointment appointment = Appointment.builder()
@@ -120,7 +124,7 @@ public class ExcelHelper {
                         .build();
 
                 ReadXLSXFileAppointmentDTO dto = ReadXLSXFileAppointmentDTO.from(course,
-                        appointment, classroom);
+                        appointment, classroom, curricularUnit, feature);
 
                 data.add(dto);
             }
@@ -136,6 +140,14 @@ public class ExcelHelper {
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }
+        }
+    }
+
+    private static int convertToInteger(String value) {
+        try {
+            return value != null ? Integer.parseInt(value) : 0;
+        } catch (Exception ex) {
+            return 0;
         }
     }
 }

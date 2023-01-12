@@ -9,6 +9,7 @@ import pt.iscte.mei.school.classrooms.model.Classroom;
 import pt.iscte.mei.school.courses.model.Course;
 import pt.iscte.mei.school.curricularunits.model.CurricularUnit;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -49,13 +51,15 @@ public class Appointment {
     @JoinColumn(name = "course", insertable = false, updatable = false)
     @OneToOne(targetEntity = Course.class, fetch = FetchType.EAGER)
     private Course courseEntity;
-    private Caracteristic caracteristic;
+
+    @ElementCollection
+    private List<String> caracteristic;
     private boolean supervisionalApproval;
 
     @Builder
     public Appointment(final LocalDateTime startDate, final LocalDateTime endDate, final int capacityRequired,
                        final String curricularUnit, final String classroom, final String course,
-                       final Caracteristic caracteristic,
+                       final List<String> caracteristic,
                        final boolean supervisionalApproval) {
         this.startDate = startDate;
         this.endDate = endDate;

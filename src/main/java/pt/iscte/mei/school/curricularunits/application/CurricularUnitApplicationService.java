@@ -27,4 +27,13 @@ public class CurricularUnitApplicationService {
 
         return repository.findAllByNameLikeIgnoreCase(name);
     }
+
+    public CurricularUnit saveIfNotExists(CurricularUnit curricularUnit) {
+        String name = curricularUnit.getName();
+        if (!repository.existsByName(name)) {
+            return repository.save(curricularUnit);
+        }
+
+        return repository.findByName(name);
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.iscte.mei.school.classrooms.model.Classroom;
 import pt.iscte.mei.school.courses.model.Course;
 import pt.iscte.mei.school.courses.repository.CourseRepository;
+import pt.iscte.mei.school.features.model.Feature;
 
 import java.util.List;
 
@@ -33,5 +34,14 @@ public class CourseApplicationService {
         log.info("Searching course by id = {}", id);
 
         return repository.findById(id).get();
+    }
+
+    public Course saveIfNotExists(Course course) {
+        String name = course.getName();
+        if (!repository.existsByName(name)) {
+            return repository.save(course);
+        }
+
+        return repository.findByName(name);
     }
 }

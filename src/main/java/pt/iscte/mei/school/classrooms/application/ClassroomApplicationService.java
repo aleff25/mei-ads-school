@@ -33,4 +33,13 @@ public class ClassroomApplicationService {
 
         return repository.findById(id).get();
     }
+
+    public Classroom saveIfNotExists(Classroom classroom) {
+        String name = classroom.getName();
+        if (!repository.existsByName(name)) {
+            return repository.save(classroom);
+        }
+
+        return repository.findByName(name);
+    }
 }

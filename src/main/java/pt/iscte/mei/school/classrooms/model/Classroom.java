@@ -29,10 +29,10 @@ public class Classroom {
 
     //TODO: See how this column is create in h2 database
     @ElementCollection
-    private List<Caracteristic> caracteristics;
+    private List<String> caracteristics;
 
     @Builder
-    public Classroom(final String id, final String name, final int capacity, final List<Caracteristic> caracteristics) {
+    public Classroom(final String id, final String name, final int capacity, final List<String> caracteristics) {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
